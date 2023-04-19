@@ -2,45 +2,31 @@
 import React, { useState } from "react";
 import { Amplify, API, graphqlOperation } from "aws-amplify";
 import { updateTodo } from "./graphql/mutations";
-import {
-  Button,
-  TextField,
-  View,
-  Radio,
-  RadioGroupField,
-} from "@aws-amplify/ui-react";
+import { Button, TextField, View } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 
 import awsExports from "./aws-exports";
 Amplify.configure(awsExports);
 
 const EditToDo = (formData) => {
-  Object.values(formData);
-  const [editForm, setEditForm] = useState(formData);
-  const [id, setId] = useState(Object.values(formData)[0].id);
-  const [editName, setEditName] = useState(Object.values(formData)[0].name);
-  const [editDescription, setEditDescription] = useState(
-    Object.values(formData)[0].description
-  );
-  const [editCategory, setEditCategory] = useState(
-    Object.values(formData)[0].category
-  );
   const [editFinished, setEditFinished] = useState(
     Object.values(formData)[0].finished
   );
+  const [successMessage, setSuccessMessage] = useState(false);
 
-  async function editTodo() {
+  async function handleEditTodo(e) {
     try {
-      console.log(editName);
-      const todo = {
-        id: id,
-        name: editName.toString(),
-        description: editDescription.toString(),
-        category: editCategory.toString(),
-        finished: editFinished.toString(),
+      e.preventDefault();
+      const targetData = {
+        id: Object.values(formData)[0].id,
+        name: Object.values(formData)[0].name,
+        description: Object.values(formData)[0].description,
+        category: Object.values(formData)[0].category,
+        finished: editFinished,
       };
-      console.log(todo);
-      await API.graphql(graphqlOperation(updateTodo, { input: todo }));
+      console.log(targetData);
+      await API.graphql(graphqlOperation(updateTodo, { input: targetData }));
+      setSuccessMessage(true);
     } catch (err) {
       console.log("error updating todo:", err);
     }
@@ -48,42 +34,49 @@ const EditToDo = (formData) => {
 
   return (
     <View style={styles.container}>
-      <h1>EDIT TODO</h1>
+      <h1>EDIT THE FINISHED STATUS</h1>
       <TextField
-        placeholder="Name"
-        onChange={(event) => setEditName(event.target.value)}
         style={styles.input}
-        defaultValue={editName}
+        defaultValue={Object.values(formData)[0].name}
       />
       <TextField
-        placeholder="Description"
-        onChange={(event) => setEditDescription(event.target.value)}
         style={styles.input}
-        defaultValue={editDescription}
+        defaultValue={Object.values(formData)[0].description}
       />
-      <label>Category :</label>
-      <div
-        value={editCategory}
-        onChange={(e) => setEditCategory(e.target.value)}
-      >
-        <input type="radio" value="Work" name="category" /> Work
-        <input type="radio" value="Home" name="category" /> Home
-        <input type="radio" value="Other" name="category" /> Other
-      </div>
-      <label>Finished? :</label>
-      <div
-        value={editFinished}
-        onChange={(e) => setEditFinished(e.target.value)}
-      >
-        <input type="radio" value="yes" name="finished" /> yes
-        <input type="radio" value="no" name="finished" /> no
-      </div>
+      <TextField
+        style={styles.input}
+        defaultValue={Object.values(formData)[0].category}
+      />
+
+      <label>
+        Finished? :
+        <div
+          value={editFinished}
+          onChange={(e) => setEditFinished(e.target.value)}
+        >
+          <input
+            type="radio"
+            value="yes"
+            name="finishedEdit"
+            defaultChecked={editFinished === "yes"}
+          />{" "}
+          yes
+          <input
+            type="radio"
+            value="no"
+            name="finishedEdit"
+            defaultChecked={editFinished === "no"}
+          />{" "}
+          no
+        </div>
+      </label>
       <div>
         <br />
       </div>
-      <Button style={styles.button} onClick={() => editTodo()}>
+      <Button style={styles.button} onClick={handleEditTodo}>
         Update Todo
       </Button>
+      {successMessage && "Updated Successfully"}
     </View>
   );
 };
