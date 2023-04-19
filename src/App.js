@@ -74,9 +74,12 @@ const App = ({ signOut, user }) => {
   ];
 
   const handleCategoryFilter = () => {
+    console.log(allTodos);
+    console.log(todos);
+    console.log(categoryFilter);
     setTodos(
       allTodos.filter((todo) => {
-        return todo.category === setCategoryFilter;
+        return todo.category === categoryFilter;
       })
     );
   };
@@ -84,7 +87,7 @@ const App = ({ signOut, user }) => {
   const handleFinishedFilter = () => {
     setTodos(
       allTodos.filter((todo) => {
-        return todo.finished === setFinishedFilter;
+        return todo.finished === finishedFilter;
       })
     );
   };

@@ -23,6 +23,7 @@ const EditToDo = (formData) => {
         description: Object.values(formData)[0].description,
         category: Object.values(formData)[0].category,
         finished: editFinished,
+        _version: Object.values(formData)[0]._version,
       };
       console.log(targetData);
       await API.graphql(graphqlOperation(updateTodo, { input: targetData }));
@@ -77,6 +78,7 @@ const EditToDo = (formData) => {
         Update Todo
       </Button>
       {successMessage && "Updated Successfully"}
+      <Button style={styles.button}>Close</Button>
     </View>
   );
 };
