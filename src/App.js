@@ -94,11 +94,15 @@ const App = ({ signOut, user }) => {
 
   return (
     <View style={styles.container}>
-      <h2>Hello {user.username}</h2>
-      <Button style={styles.button} onClick={signOut}>
-        Sign out
-      </Button>
-      <h1>AMPLIFY TODOS</h1>
+      <h2>
+        Hello {user.username}&emsp;&emsp;
+        <Button style={{ backgroundColor: "lightgray" }} onClick={signOut}>
+          Sign out
+        </Button>
+      </h2>
+      <h1>
+        <center>AMPLIFY TODOS</center>
+      </h1>
       <TextField
         placeholder="Name"
         onChange={(event) => setInput("name", event.target.value)}
@@ -222,7 +226,7 @@ const App = ({ signOut, user }) => {
 
 const styles = {
   container: {
-    margin: "0 auto",
+    margin: "30px 10px 10px 30px",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
