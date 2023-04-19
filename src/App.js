@@ -142,11 +142,10 @@ const App = ({ signOut, user }) => {
         <br />
       </div>
       <SelectField
-        label="Search based on Category:"
         value={categoryFilter}
         onChange={(e) => setCategoryFilter(e.target.value)}
         style={styles.searchField}
-        placeholder="Categories"
+        placeholder="Search by Category"
       >
         {uniqueCategories.map((categoryName, index) => (
           <option key={index} value={categoryName}>
@@ -160,22 +159,23 @@ const App = ({ signOut, user }) => {
       <div>
         <br />
       </div>
-      <SelectField
-        label="Search based on State of Completion:"
-        value={finishedFilter}
-        onChange={(e) => setFinishedFilter(e.target.value)}
-        style={styles.searchField}
-        placeholder="Finished?"
-      >
-        {uniqueFinishedState.map((finishedState, index) => (
-          <option key={index} value={finishedState}>
-            {finishedState}
-          </option>
-        ))}
-      </SelectField>
-      <Button style={styles.button} onClick={handleFinishedFilter}>
-        Search
-      </Button>
+      <div>
+        <SelectField
+          value={finishedFilter}
+          onChange={(e) => setFinishedFilter(e.target.value)}
+          style={styles.searchField}
+          placeholder="Search by Finished State"
+        >
+          {uniqueFinishedState.map((finishedState, index) => (
+            <option key={index} value={finishedState}>
+              {finishedState}
+            </option>
+          ))}
+        </SelectField>
+        <Button style={styles.button} onClick={handleFinishedFilter}>
+          Search
+        </Button>
+      </div>
       <div>
         <br />
       </div>
