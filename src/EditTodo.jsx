@@ -14,9 +14,10 @@ import "@aws-amplify/ui-react/styles.css";
 import awsExports from "./aws-exports";
 Amplify.configure(awsExports);
 
-const Edit = (formData) => {
+const EditToDo = (formData) => {
   Object.values(formData);
-  const [editId, setIdName] = useState(Object.values(formData)[0].id);
+  const [editForm, setEditForm] = useState(formData);
+  const [id, setId] = useState(Object.values(formData)[0].id);
   const [editName, setEditName] = useState(Object.values(formData)[0].name);
   const [editDescription, setEditDescription] = useState(
     Object.values(formData)[0].description
@@ -32,11 +33,11 @@ const Edit = (formData) => {
     try {
       console.log(editName);
       const todo = {
-        id: editId,
-        name: editName,
-        description: editDescription,
-        category: editCategory,
-        finished: editFinished,
+        id: id,
+        name: editName.toString(),
+        description: editDescription.toString(),
+        category: editCategory.toString(),
+        finished: editFinished.toString(),
       };
       console.log(todo);
       await API.graphql(graphqlOperation(updateTodo, { input: todo }));
@@ -60,30 +61,27 @@ const Edit = (formData) => {
         style={styles.input}
         defaultValue={editDescription}
       />
-      <RadioGroupField
-        label="Category :"
+      <label>Category :</label>
+      <div
         value={editCategory}
         onChange={(e) => setEditCategory(e.target.value)}
-        defaultValue={editCategory}
-        direction={"row"}
       >
-        <Radio value="work">work</Radio>
-        <Radio value="home">home</Radio>
-      </RadioGroupField>
-      <RadioGroupField
-        label="Finished? :"
+        <input type="radio" value="Work" name="category" /> Work
+        <input type="radio" value="Home" name="category" /> Home
+        <input type="radio" value="Other" name="category" /> Other
+      </div>
+      <label>Finished? :</label>
+      <div
         value={editFinished}
         onChange={(e) => setEditFinished(e.target.value)}
-        defaultValue={editFinished}
-        direction={"row"}
       >
-        <Radio value="yes">yes</Radio>
-        <Radio value="no">no</Radio>
-      </RadioGroupField>
+        <input type="radio" value="yes" name="finished" /> yes
+        <input type="radio" value="no" name="finished" /> no
+      </div>
       <div>
         <br />
       </div>
-      <Button style={styles.button} onClick={editTodo}>
+      <Button style={styles.button} onClick={() => editTodo()}>
         Update Todo
       </Button>
     </View>
@@ -131,4 +129,4 @@ const styles = {
   },
 };
 
-export default Edit;
+export default EditToDo;

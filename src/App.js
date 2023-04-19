@@ -15,7 +15,7 @@ import {
 import "@aws-amplify/ui-react/styles.css";
 
 import awsExports from "./aws-exports";
-import Edit from "./Edit";
+import EditToDo from "./EditTodo";
 Amplify.configure(awsExports);
 
 const initialState = {
@@ -31,8 +31,8 @@ const App = ({ signOut, user }) => {
   const [todos, setTodos] = useState([]);
   const [editFormVisible, setEditFormVisible] = useState(false);
   const [editFormData, setEditFormData] = useState(initialState);
-  const [selectCategoryFilter, setSelectCategoryFilter] = useState([]);
-  const [selectFinishedFilter, setSelectFinishedFilter] = useState([]);
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [finishedFilter, setFinishedFilter] = useState("");
 
   useEffect(() => {
     fetchTodos();
@@ -76,7 +76,7 @@ const App = ({ signOut, user }) => {
   const handleCategoryFilter = () => {
     setTodos(
       allTodos.filter((todo) => {
-        return todo.category === selectCategoryFilter;
+        return todo.category === setCategoryFilter;
       })
     );
   };
@@ -84,7 +84,7 @@ const App = ({ signOut, user }) => {
   const handleFinishedFilter = () => {
     setTodos(
       allTodos.filter((todo) => {
-        return todo.finished === selectFinishedFilter;
+        return todo.finished === setFinishedFilter;
       })
     );
   };
@@ -112,7 +112,6 @@ const App = ({ signOut, user }) => {
       <div
         value={formState.category}
         onChange={(e) => setInput("category", e.target.value)}
-        defaultValue={formState.category}
         multiple={false}
       >
         <input type="radio" value="Work" name="category" /> Work
@@ -124,7 +123,6 @@ const App = ({ signOut, user }) => {
         multiple={false}
         value={formState.finished}
         onChange={(e) => setInput("finished", e.target.value)}
-        defaultValue={formState.finished}
       >
         <input type="radio" value="yes" name="finished" /> yes
         <input type="radio" value="no" name="finished" /> no
@@ -138,13 +136,15 @@ const App = ({ signOut, user }) => {
       </div>
       <SelectField
         label="Search based on Category:"
-        value={selectCategoryFilter}
-        onChange={(e) => setSelectCategoryFilter(e.target.value)}
+        value={categoryFilter}
+        onChange={(e) => setCategoryFilter(e.target.value)}
         style={styles.searchField}
         placeholder="Categories"
       >
-        {uniqueCategories.map((categoryName) => (
-          <option value={categoryName}>{categoryName}</option>
+        {uniqueCategories.map((categoryName, index) => (
+          <option key={index} value={categoryName}>
+            {categoryName}
+          </option>
         ))}
       </SelectField>
       <Button style={styles.button} onClick={handleCategoryFilter}>
@@ -155,13 +155,15 @@ const App = ({ signOut, user }) => {
       </div>
       <SelectField
         label="Search based on State of Completion:"
-        value={selectFinishedFilter}
-        onChange={(e) => setSelectFinishedFilter(e.target.value)}
+        value={finishedFilter}
+        onChange={(e) => setFinishedFilter(e.target.value)}
         style={styles.searchField}
         placeholder="Finished?"
       >
-        {uniqueFinishedState.map((finishedState) => (
-          <option value={finishedState}>{finishedState}</option>
+        {uniqueFinishedState.map((finishedState, index) => (
+          <option key={index} value={finishedState}>
+            {finishedState}
+          </option>
         ))}
       </SelectField>
       <Button style={styles.button} onClick={handleFinishedFilter}>
@@ -210,7 +212,7 @@ const App = ({ signOut, user }) => {
           ))}
         </tbody>
       </table>
-      {editFormVisible && <Edit formData={editFormData} />}
+      {editFormVisible && <EditToDo formData={editFormData} />}
     </View>
   );
 };
