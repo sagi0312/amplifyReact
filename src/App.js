@@ -1,8 +1,10 @@
 /* src/App.js */
 import React, { useEffect, useState } from "react";
 import { Amplify, API, graphqlOperation } from "aws-amplify";
-import { createTodo } from "./graphql/mutations";
+//import { createTodo } from "./graphql/mutations";
 import { listTodos } from "./graphql/queries";
+import { DataStore } from "@aws-amplify/datastore";
+import { Todo } from "./models";
 
 import {
   withAuthenticator,
@@ -62,7 +64,9 @@ const App = ({ signOut, user }) => {
       const todo = { ...formState };
       setTodos([...todos, todo]);
       setFormState(initialState);
-      await API.graphql(graphqlOperation(createTodo, { input: todo }));
+      //await API.graphql(graphqlOperation(createTodo, { input: todo }));
+      const addNewTodo = await DataStore.save(new Todo(todo));
+      console.log("Todo saved successfully!", addNewTodo);
     } catch (err) {
       console.log("error creating todo:", err);
     }
